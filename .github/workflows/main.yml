@@ -88,12 +88,20 @@ jobs:
             repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all)
           '
 
-      - name: Clone Kernel
+      - name: Verify Prebuilt Stock Kernel
         run: |
           docker exec bionic_64 bash -c '
             set -e
             cd ~/TWRP
-            git clone --depth 1 --branch main https://github.com/notnoelchannel2/lenovoa1000kernel3.10sourceENHANCED.git kernel/lenovo/a1000
+            test -f device/lenovo/a1000/prebuilt/zImage
+            test -f device/lenovo/a1000/prebuilt/dtb
+            test "$(stat -c%s device/lenovo/a1000/prebuilt/zImage)" -eq 9077220
+            test "$(stat -c%s device/lenovo/a1000/prebuilt/dtb)" -eq 53248
+            K=$(sha256sum device/lenovo/a1000/prebuilt/zImage | cut -d" " -f1)
+            D=$(sha256sum device/lenovo/a1000/prebuilt/dtb | cut -d" " -f1)
+            test "$K" = "8fb4fc55121ea362681eb23b7010497b89e32a65b88951bc2ade074bc2a842e5"
+            test "$D" = "c8700d5129088024dc157df30128ceb52ef13d51010a275544c64fff6c086d94"
+            echo "Exact S30666 stock kernel + DTB verified"
           '
 
       - name: Building TWRP
