@@ -83,7 +83,7 @@ jobs:
             cd ~/TWRP
             repo init --depth=1 -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_omni.git -b twrp-5.1
             git clone --depth 1 --branch twrp-5.1 --single-branch \
-              https://github.com/notnoelchannel2/twrp_device_lenovo_a1000.git \
+              https://github.com/Achraflgu/twrp_device_lenovo_a1000.git \
               device/lenovo/a1000
             repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all)
           '
